@@ -16,19 +16,19 @@ The output of the operation is logged to ".\Clear-TempASPNETFiles.log" by defaul
 
 ## Parameters
 
-[string] $ASPNetPath
+[string] -ASPNetPath
 
 - Path for the 'Temporary ASP.NET Files' folder. Defaults to "C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\Temporary ASP.NET Files")
 
-[string] $OSPath
+[string] -OSPath
 
 - Path for the 'OutSystems Platform Server' folder. Defaults to "C:\Program Files\OutSystems\Platform Server")
 
-[int] $ToKeep
+[int] -ToKeep
 
 - Number of in use versions to keep for folders in use. Value needs to be bigger or equal to 1
 
-[string] $LogfilePath
+[string] -LogfilePath
 
 - Optional path for the log file with the execution. Defaults to ".\Clear-TempASPNETFiles.log"
 

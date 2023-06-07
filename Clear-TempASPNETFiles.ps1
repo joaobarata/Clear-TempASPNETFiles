@@ -12,10 +12,10 @@ Any unused folder that do not match the deployed modules will be removed.
 The output of the operation is logged to ".\Clear-TempASPNETFiles.log" by default.
 
 .PARAMETER InputPath
-[string] $ASPNetPath - Path for the 'Temporary ASP.NET Files' folder. Defaults to "C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\Temporary ASP.NET Files")
-[string] $OSPath - Path for the 'OutSystems Platform Server' folder. Defaults to "C:\Program Files\OutSystems\Platform Server")
-[int] $ToKeep - Number of in use versions to keep for folders in use. Value needs to be bigger or equal to 1
-[string] $LogfilePath - Optional path for the log file with the execution. Defaults to ".\Clear-TempASPNETFiles.log"
+[string] -ASPNetPath - Path for the 'Temporary ASP.NET Files' folder. Defaults to "C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\Temporary ASP.NET Files")
+[string] -OSPath - Path for the 'OutSystems Platform Server' folder. Defaults to "C:\Program Files\OutSystems\Platform Server")
+[int] -ToKeep - Number of in use versions to keep for folders in use. Value needs to be bigger or equal to 1
+[string] -LogfilePath - Optional path for the log file with the execution. Defaults to ".\Clear-TempASPNETFiles.log"
 
 .INPUTS
 
