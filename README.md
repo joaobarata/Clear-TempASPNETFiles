@@ -34,13 +34,13 @@ The output of the operation is logged to ".\Clear-TempASPNETFiles.log" by defaul
 
 ## Examples
 
-### Using defauls
+### Using defaults
 
 ```powershell
 PS> .\Clear-TempASPNETFiles.ps1
 ```
 
-### Changing defaults
+### Using custom values
 
 ```powershell
 PS> .\Clear-TempASPNETFiles.ps1 -ASPNetPath "C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\Temporary ASP.NET Files" -OSPath "C:\Program Files\OutSystems\Platform Server" -ToKeep 1 -LogfilePath ".\Clear-TempASPNETFiles.log"
