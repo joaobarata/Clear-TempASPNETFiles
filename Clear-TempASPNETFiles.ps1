@@ -85,9 +85,9 @@ function Get-Folders-To-Delete {
 
     if ($tempFolders.count -eq 0) {
         return 0
-    } 
+    }
+    $size = ($tempFolders | Get-ChildItem -Recurse | Measure-Object -Sum Length).Sum 
     WriteLog "Cleaning $("{0:N2} MB" -f ($size/ 1MB)) of folder: $($FolderPath)"
-    $size = ($tempFolders | Get-ChildItem -Recurse | Measure-Object -Sum Length).Sum
     foreach ($file in $tempFolders) {
         $path = Join-Path -Path $FolderPath -ChildPath $file
         Remove-Item -Recurse -Force $path
