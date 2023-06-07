@@ -4,10 +4,10 @@ PowerShell Script to clear the Temporary ASP Net files on an OutSystems Instalat
 
 ## Description
 
-The Clear-TempASPNETFiles.ps1 script deletes unused files in the Temporary ASP.NET Files folder based on the modules deployed by the OutSystems Platform server.
-At least one folder will be kept per module deployed by the OutSystems Platform server.
-More folders can be kepp by optionally passing a higher value to the -ToKeep flag.
-Unused folders that do not match any module deployed will be removed.
+The Clear-TempASPNETFiles.ps1 script deletes unused files in the Temporary ASP.NET Files folder based on the modules deployed by the OutSystems Platform server.\
+At least one folder will be kept per module deployed by the OutSystems Platform server.\
+More folders can be kepp by optionally passing a higher value to the -ToKeep flag.\
+Unused folders that do not match any module deployed will be removed.\
 The output of the operation is logged to ".\Clear-TempASPNETFiles.log" by default.
 
 ## Parameters
