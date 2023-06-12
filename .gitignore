@@ -1,2 +1,14 @@
-# ignore ALL .log files
+# .log files
 *.log
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+#vscode
+.vscode
