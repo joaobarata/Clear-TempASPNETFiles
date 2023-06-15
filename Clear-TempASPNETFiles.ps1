@@ -37,7 +37,6 @@ PS> .\Clear-TempASPNETFiles.ps1 -ASPNetPath "C:\WINDOWS\Microsoft.NET\Framework6
 
 param
 (
-
     # Enter the path for the 'Temporary ASP.NET Files' folder. Defaults to C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\Temporary ASP.NET Files")
     [string] $ASPNetPath = (Join-Path -Path ([environment]::getfolderpath("Windows")) -ChildPath "Microsoft.NET\Framework64\v4.0.30319\Temporary ASP.NET Files"),
     # Enter the path for the 'OutSystems Platform Server' folder. Defaults to C:\Program Files\OutSystems\Platform Server")
@@ -72,12 +71,11 @@ function WriteLog {
 Helper funtion that will get the list of folders by LastWriteTime in descending order and skip X amount of files passed as parameter
 The folders returned will then be deleted.
 #>
-function Get-Folders-To-Delete {
+function Remove-OldFolders {
     Param (
         [Parameter(Mandatory = $true)] [string] $FolderPath,
         [Parameter(Mandatory = $true)] [int] $FoldersToSkip
     )
-
     $tempFolders = Get-ChildItem -Path $FolderPath |
     Where-Object { $_.PSIsContainer } |
     Sort-Object LastWriteTime  -desc |
@@ -91,10 +89,21 @@ function Get-Folders-To-Delete {
     foreach ($file in $tempFolders) {
         $path = Join-Path -Path $FolderPath -ChildPath $file
         Remove-Item -Recurse -Force $path
-        WriteLog "Removed old folder: $($file)"
+        WriteLog "Removed old folder: $($path)"
     }
     return $size
 }
+
+function Remove-UnusedFolders {
+    Param (
+        [Parameter(Mandatory = $true)] [string] $FolderPath
+    )
+    $size = ($FolderPath | Get-ChildItem -Recurse | Measure-Object -Sum Length).Sum 
+    WriteLog "Removed folder: $($FolderPath) with $("{0:N2} MB" -f ($size/ 1MB))"
+    Remove-Item -Recurse -Force $path
+    return $size
+}
+
 
 #Get the list of folders inside the "Temporary ASP.NET Files" folder 
 $tempFolders = Get-ChildItem -Path $ASPNetPath |
@@ -106,6 +115,9 @@ $running = Join-Path -Path $OSPath -ChildPath "running"
 $apps = Get-ChildItem -Path $running |
 Where-Object { $_.PSIsContainer } | 
 Foreach-Object { $_.Name.ToLower().Split('.')[0] }
+
+#Add root folder to the list of folders not to be deleted
+$apps += "root"
 
 $UsedApps = @()
 $unused = @()
@@ -121,26 +133,24 @@ foreach ($folder in $tempFolders) {
 WriteLog "Total App folders: $($UsedApps.count)"
 WriteLog "Total Unused Folders: $($unused.count)"
 
-if( $UsedApps.count -gt 0){
+if ( $UsedApps.count -gt 0) {
     $AppSize = 0;
     WriteLog "App folders to be deleted:"
     foreach ($folder in $UsedApps) {
         $path = Join-Path -Path $ASPNetPath -ChildPath $folder
-        $AppSize += Get-Folders-To-Delete $path $ToKeep
+        $AppSize += Remove-OldFolders $path $ToKeep
     }
-    WriteLog "Total space to be freed: $("{0:N2} MB" -f ($AppSize/ 1MB))"
+    WriteLog "Total space recovered by removing old folders: $("{0:N2} MB" -f ($AppSize/ 1MB))"
 }
 
 # Check if there are folders that only exist on the "Temporary ASP.NET Files" folder and delete them
-if($unused.count -gt 0){
-    $UnusedSize = 0;
+if ($unused.count -gt 0) {
     WriteLog "Unused folders to be deleted:"
     foreach ($folder in $unused) {
         $path = Join-Path -Path $ASPNetPath -ChildPath $folder
-        $UnusedSize += Get-Folders-To-Delete $path 0
-        Remove-Item -Recurse -Force $path
+        $UnusedSize += Remove-UnusedFolders $path
     }
-    WriteLog "Space to be freed: $("{0:N2} MB" -f ($UnusedSize/ 1MB))"
+    WriteLog "Total space recovered by removing unused folders: $("{0:N2} MB" -f ($UnusedSize/ 1MB))"
 }
 
 
